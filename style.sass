@@ -1,0 +1,82 @@
+html 
+  min-height: 100%
+  font-size: 16px
+  font-family: 'Source Sans Pro', Roboto, Arial, sans-serif
+  color: #eee
+  background: #333;
+
+body 
+  margin: 0px
+  padding: 0px
+  box-sizing: border-box
+  min-height: 100vh
+
+main
+  width: 100%;
+  max-width: 1080px
+  margin: 0 auto
+
+section
+  &.section__listInput
+    width: 500px
+    margin: 40px auto 0;
+  
+  .section__h2 
+    font-size: 14px
+    text-transform: uppercase
+    font-weight: normal
+    letter-spacing: 1.3px;
+
+  #listInput
+    padding: 20px 30px
+    border: 1px solid #666;
+    border-radius: 10px
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.30)
+    transition: 300ms ease
+
+    &:hover
+      cursor: pointer;
+      box-shadow: 1px 8px 15px rgba(0, 0, 0, 0.50)
+
+
+  #listInput__title
+    min-height: 40px;
+
+    &.show
+      margin: 15px 0
+  
+  #listInput__body
+    height: 0px
+    width: 0px
+    overflow: hidden
+    
+    &.show
+      width: 100%
+      min-height: 80px  
+
+
+
+[id^="listInput__"]
+  &:focus 
+    outline: none;
+
+[id^="listInput__"]:empty:not(:focus):before
+  content:attr(data-text)
+
+ul
+  &#pinnedList, &#mainList
+    padding: 0px
+
+.listItem
+  list-style: none
+  padding: 20px
+  background: #444
+  border: 1px solid #666
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  &__title
+    // font-size: 20px
+    font-weight: bold
+    margin-bottom: 17.5px;
+    text-transform: capitalize;
