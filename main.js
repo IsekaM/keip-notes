@@ -1,47 +1,29 @@
 storage = {
   key: 'keepCloneStorage',
   
-  get(key = this.key) {
-    return localStorage.getItem(key);
+  get() {
+    return localStorage.getItem(this.key);
   },
 
   set(key, value) {
     return localStorage.set(key, value);
   },
 
-  check(key = this.key, value = list.items) {
-    if (storage.get(key) === null && value) {
-      storage.set(key, JSON.stringify(value));
-    }
-  },
-
-  init(key = this.key) {
-    const items = storage.get(this.key);
-    if (list.items.length === 0 && items) {
-      list.items = JSON.parse(items);
-      list.retrieve();
-      console.log('fiyah');
-    }
-  },
-
   update(key = this.key, value = list.items) {
     localStorage.setItem(key, JSON.stringify(value));
+  },
+
+  clear() {
+    localStorage.clear();
   }
 };
 
 
 const element = {
-  prepend(parent, element) {
-    if (parent.children.length === 0) {
-      parent.appendChild(element);
-    } else {
-      parent.insertBefore(element, parent.children[0]);
-    }
-  },
 
-  create(ele) {
-    const element = document.createElement(ele);
-    return element;
+  create(element) {
+    const ele = document.createElement(element);
+    return ele;
   },
 
   attributes(ele, attributes) {
@@ -54,10 +36,6 @@ const element = {
     }
   },
 
-  // appendChild(parent, child) {
-
-  // },
-
   appendChildren(parent, arrayOfChildren) {
     const children = [...arrayOfChildren];
     for (const child of children) {
@@ -66,24 +44,34 @@ const element = {
   }
 };
 
+
 const form = {
-  container: document.getElementById('listInput'),
-  title: document.getElementById('listInput__title'),
-  body: document.getElementById('listInput__body'),
+  init() {
+    this.domCache();
+  },
+
+  domCache() {
+    this.container = document.getElementById('listInput');
+    this.title = document.getElementById('listInput__title');
+    this.body = document.getElementById('listInput__body');
+  },
+
   focus() {
     this.title.classList.add('show');
     this.body.classList.add('show');
   },
 
-  blur() {
-    this.title.classList.remove('show');
-    this.body.classList.remove('show');
-  },
-
   clear() {
     this.title.textContent = "";
     this.body.textContent = "";
-  }
+  },
+
+  blur() {
+    this.title.classList.remove('show');
+    this.body.classList.remove('show');
+    this.clear();
+  },
+
 };
 
 
@@ -94,43 +82,70 @@ const list = {
 
   body: '',
 
-  sections: {
-    pinned: document.getElementById('pinnedList'),
-    main: document.getElementById('mainList')
+  init() {
+    this.cacheDom();
+    this.render()
+  },
+
+  cacheDom() {
+    this.pinnedSection = document.getElementById('pinnedList');
+    this.mainSection = document.getElementById('mainList');
+  },
+
+  render() {
+    const key = storage.key.toString();
+    console.log(key);
+    const items = storage.get(key);
+    const value = JSON.parse(items);
+    if (items && value.lenth > 0) {
+      this.items = value;
+      console.log(true);
+      for (const item of this.items) {
+        const newItem = list.createItem(item.title, item.body, item.index);
+        element.appendChildren(this.mainSection, [newItem]);
+      } 
+    } else {
+      storage.clear();
+    }
   },
 
   // ** Method used to create a list element with alll necesarry children
-  createEle(title, body, index = 0) {
+  createItem(title = form.title.textContent, body = form.body.textContent, index = this.items.length, parent = this.mainSection) {
+    //Making parent and child elements to hold note/list item
     const listCont = element.create('li');
     const divCont = element.create('div');
     const listItemTitle = element.create('div');
     const listItemBody = element.create('div');
-    element.attributes(listCont, {class: "listItem", ['data-listIndex']: index})
+
+    //Adding attributes to eatch element
+    element.attributes(listCont, {class: "listItem", ['data-listIndex']: index});
     element.attributes(divCont, { class: "listItem__cont" });
     element.attributes(listItemTitle, { class: "listItem__title", contenteditable: "true" });
     element.attributes(listItemBody, { class: "listItem__body", contenteditable: "true" });
 
+    //Adding text to title and body
     listItemTitle.textContent = title;
     listItemBody.textContent = body;
 
+    //Appending children to list container
     element.appendChildren(listCont, [divCont, listItemTitle, listItemBody]);
 
-    return listCont;
+    //Prepending item to list
+    this.prependItem(parent, listCont);
   },
 
-
-  // ** Method used to check text content of elemnt to see if its >= to "n" values
-  checkField(field, length, callback) {
-    if (field.textContent.length >= length) {
-      callback();
+  prependItem(parent, element) {
+    if (parent.children.length === 0) {
+      parent.appendChild(element);
+    } else {
+      parent.prepend(element);
     }
   },
 
-  retrieve(items = this.items) {
-    const listItems = [...items];
-    for (const item of listItems) {
-      const ele = this.createEle(item.title, item.body, item.index);
-      element.appendChildren(this.sections.main, [ele]);
+  // ** Method used to check text content of elemnt to see if its >= to "n" values
+  checkField(field, chars, callback) {
+    if (field.textContent.length >= chars) {
+      callback();
     }
   },
 
@@ -141,30 +156,42 @@ const list = {
 
     this.checkField(form.body, 1, () => {
       this.body = form.body.textContent;
-      this.items.unshift({ title: this.title, body: this.body, index: this.items.length});
-      const newItem = this.createEle(this.title, this.body, this.items.length);
-      element.prepend(this.sections.main, newItem);
-      form.clear()
-      storage.update();
+      this.items.unshift({ title: this.title, body: this.body, index: this.items.length });
+      this.createItem(this.title, this.body, this.items.length);
     });
   }
 
 };
 
-document.addEventListener('click', (e) => {
-  const formTitle = `#${form.title.id}`;
-  const formBody = `#${form.body.id}`;
-  const target = e.target;
 
-  if (target.closest(formTitle) || target.closest(formBody)) {
-    form.focus();
-  } else {
-    form.blur();
-    list.addItem();
-  }
-});
+const app = {
+  init() {
+    this.initModules();
+    this.bindEvents();    
+  },
 
-addEventListener('load', () => {
-  console.log('heya');
-  storage.init();
-});
+  initModules() {
+    form.init();
+    list.init();
+  },
+
+  bindEvents() {
+    document.addEventListener('click', this.onFormBlur);
+  },
+
+  onFormBlur(e) {
+    const formTitleID = `#${form.title.id}`;
+    const formBodyID = `#${form.body.id}`;
+    const targetClicked = e.target.closest(formTitleID) || e.target.closest(formBodyID);
+    if (targetClicked) {
+      form.focus();
+    } else {
+      form.blur();
+      storage.update();
+      list.addItem();
+    }
+  },
+
+};
+
+app.init();
