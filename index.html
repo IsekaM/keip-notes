@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta name="description" content="">
   <meta name="keywords" content="">
@@ -10,32 +11,72 @@
   <link rel="stylesheet" href="style.css">
   <title>Todo</title>
 </head>
+
 <body>
 
   <main>
-    <section class="section section__listInput">
-      <div id="listInput">
-        <div id="listInput__title" contenteditable="true" tabindex="1" data-text="Title"></div>
-        <div id="listInput__body" contenteditable="true" tabindex="2" data-text="Add Note"></div>
-      </div>
-    </section>
-    
-    <section>
-      <h2 class="section__h2">Pinned</h2>
-      <ul id="pinnedList">
+    <section class="topBar">
+      <ul>
+        <li class="topBar__nav">
+          <div class="topBar__nav-cont">
+            <div class="topBar__nav-burger"></div>
+            <div class="topBar__nav-logoo"></div>
+          </div>
+        </li>
 
+        <li class="topBar__input">
+          <div id="listInput">
+            <div id="listInput__title" contenteditable="true" tabindex="1" data-text="Title"></div>
+            <div id="listInput__body" contenteditable="true" tabindex="2" data-text="Add Note"></div>
+          </div>
+        </li>
+
+        <li class="topBar__search">
+          <input class="topBar__search-input" type="search" name="" id="" placeholder="Search Notes">
+          <input class="topBar__search-button" type="button" value="">
+        </li>
       </ul>
     </section>
 
-    <section>
-      <h2 class="section__h2">Other</h2>
-      <ul id="mainList">
-
-      </ul>
-    </section>
-    
-  </main>
-  
+    <main>
+      <nav>
+        <ul>
+          <li>
+            <a href="">
+              <i></i><span>All Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i></i><span>Favourites</span>
+            </a>
+          </li>
+          <li><a href="">
+              <i></i><span>Archived</span></a>
+          </li>
+          <li>
+            <a href="">
+              <i></i><span>Trash</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <section>
+        <h2 class="section__h2">Pinned</h2>
+        <ul id="pinnedList">
+      
+        </ul>
+      </section>
+      
+      <section>
+        <h2 class="section__h2">Other</h2>
+        <ul id="mainList">
+      
+        </ul>
+      </section>
+    </main>
   <script src="./main.js"></script>
 </body>
+
 </html>
