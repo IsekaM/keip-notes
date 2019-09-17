@@ -134,7 +134,8 @@ const list = {
 		listItemBody.textContent = body;
 
 		//Appending children to list container
-		element.appendChildren(listContainer, [ divCont, listItemTitle, listItemBody ]);
+		element.appendChildren(divCont, [ listItemTitle, listItemBody ]);
+		element.appendChildren(listContainer, [ divCont ]);
 
 		//Prepending item to list
 		return listContainer;
