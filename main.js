@@ -62,9 +62,9 @@ const form = {
 	},
 
 	domCache() {
-		this.container = document.getElementById('listInput');
-		this.title = document.getElementById('listInput__title');
-		this.body = document.getElementById('listInput__body');
+		this.container = document.getElementById('topBar__input-cont');
+		this.title = document.getElementById('topBar__input-title');
+		this.body = document.getElementById('topBar__input-body');
 	},
 
 	focus() {
@@ -98,7 +98,7 @@ const list = {
 	},
 
 	cacheDom() {
-		this.pinnedSection = document.getElementById('pinnedList');
+		this.pinnedSection = document.getElementById('favList');
 		this.mainSection = document.getElementById('mainList');
 	},
 
@@ -187,9 +187,8 @@ const app = {
 	},
 
 	onFormBlur(e) {
-		const formTitleID = `#${form.title.id}`;
-		const formBodyID = `#${form.body.id}`;
-		const targetClicked = e.target.closest(formTitleID) || e.target.closest(formBodyID);
+		const formContainer = `#${form.container.id}`;
+		const targetClicked = e.target.closest(formContainer);
 		if (targetClicked) {
 			form.focus();
 		} else {

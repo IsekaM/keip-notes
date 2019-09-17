@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="32" viewBox="0 0 69 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2d3142;
+        font-size: 32px;
+        font-family: CircularStd-Black, Circular Std Black;
+        font-weight: 800;
+        letter-spacing: 0.001em;
+      }
+    </style>
+  </defs>
+  <text id="Keip" class="cls-1" transform="translate(0 26)"><tspan x="0" y="0">Keip</tspan></text>
+</svg>
