@@ -16,7 +16,7 @@
 
 <body>
 
-    <section class="topBar">
+    <header class="topBar">
       <ul class="topBar__cont">
         <li class="topBar__nav">
           <div class="topBar__nav-cont">
@@ -30,8 +30,8 @@
             <li class="topBar__input-title-cont">
               <div id="topBar__input-title" contenteditable="true" tabindex="1" data-text="Take a note"></div>
               <ul>
-                <li><img src="./vect/archive.svg" alt=""></li>
-                <li><img src="./vect/star_favourite.svg" alt=""></li>
+                <li><img src="./vect/archive.svg" alt="" id="topBar__button-archive"></li>
+                <li><img src="./vect/star_favourite.svg" alt="" id="topBar__button-fav"></li>
               </ul>
             </li>
             <li class="topBar__input-body-cont">
@@ -41,28 +41,12 @@
           </ul>
         </li>
 
-        <!-- <li class="topBar__input">
-          <div id="topBar__input-cont">
-            <div id="topBar__input-title" contenteditable="true" tabindex="1" data-text="Take a Note"></div>
-            <ul class="topBar__button">
-              <li class="topBar__button-fav">
-                <img src="./vect/star_favourite.svg" alt="favourite">
-              </li>
-              <li>
-                <img src="./vect/archive.svg" alt="archive">
-              </li>
-            </ul>
-            <div id="topBar__button-pinned"></div>
-            <div id="topBar__input-body" contenteditable="true" tabindex="2" data-text="Add Note"></div>
-          </div>
-        </li> -->
-
         <li class="topBar__search">
           <input class="topBar__search-input" type="search" name="" id="" placeholder="Search Notes">
           <button class="topBar__search-button"><img src="./vect/search.svg" alt="search icon"></button>
         </li>
       </ul>
-    </section>
+    </header>
 
     <main>
       <nav>
@@ -90,18 +74,23 @@
 
       <section class="listSection">
         <section>
-          <h2 class="section__h2 h3">Favourites</h2>
-          <ul id="favList">
-        
+          <h2 class="section__h2 h4">Favourites</h2>
+          <ul id="favNotes">
           </ul>
-        </section>
+      </section>
         
-        <section>
-          <h2 class="section__h2 h3">Other Notes</h2>
-          <ul id="mainList">
-        
-          </ul>
-        </section>
+      <section>
+        <h2 class="section__h2 h4">Other Notes</h2>
+        <ul id="mainNotes">
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="section__h2 h4">Archived Notes</h2>
+        <ul id="archivedNotes">
+        </ul>
+      </section>
+
       </section>
     </main>
   <script src="./main.js"></script>

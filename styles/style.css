@@ -11,8 +11,17 @@
 }
 
 /************************************************** 
-***Header styles 
+***Simple Reset
 **************************************************/
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	transition: all 1s ease-in;
+}
+
 ul {
 	margin: 0px;
 	padding-left: 0px;
@@ -31,8 +40,6 @@ html {
 }
 
 body {
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
 	padding: 0px;
 	margin: 0px;
 	background: var(--color-white);
@@ -84,7 +91,8 @@ h4,
 .h4 {
 	font-size: 1em;
 	line-height: 1.625em;
-	margin-top: 1.625em;
+	margin-top: 0px;
+	/* margin-top: 1.625em; */
 	margin-bottom: 0em;
 }
 
@@ -239,6 +247,7 @@ sub {
 	min-height: 30px;
 	font-weight: bold;
 	font-size: 1rem;
+	flex: 6 1 0;
 }
 
 #topBar__input-title {
@@ -327,8 +336,9 @@ nav {
 /************************************************** 
 ***Main Section Styles
 **************************************************/
-#pinnedList,
-#mainList {
+#favNotes,
+#mainNotes,
+#archivedNotes {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -336,13 +346,13 @@ nav {
 	flex-wrap: wrap;
 }
 
-#pinnedList h2,
-#mainList h2 {
+#favNotes h2,
+#mainNotes h2 {
 	padding-left: 18px;
 }
 
 .listItem {
-	flex-basis: calc(100% / 5 - 36px);
+	flex-basis: calc(100% / 5);
 	padding: 18px;
 	/* margin: 18px; */
 }

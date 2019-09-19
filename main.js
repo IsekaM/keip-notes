@@ -21,7 +21,7 @@ storage = {
 		return localStorage.set(key, value);
 	},
 
-	update(key = this.key, value = list.items) {
+	update(key = this.key, value = note.items) {
 		localStorage.setItem(key, JSON.stringify(value));
 	},
 
@@ -65,6 +65,22 @@ const form = {
 		this.container = document.getElementById('topBar__input-cont');
 		this.title = document.getElementById('topBar__input-title');
 		this.body = document.getElementById('topBar__input-body');
+		this.archiveButton = document.getElementById('topBar__button-archive');
+		this.favButton = document.getElementById('topBar__button-fav');
+	},
+
+	checkButtonClass(button, otherButton, target) {
+		if (target === button) {
+			button.classList.toggle('true');
+			otherButton.classList.remove('true');
+			console.log(target);
+		}
+	},
+
+	addButtonClass(e) {
+		const target = e.target;
+		this.checkButtonClass(this.archiveButton, this.favButton, target);
+		this.checkButtonClass(this.favButton, this.archiveButton, target);
 	},
 
 	focus() {
@@ -78,41 +94,36 @@ const form = {
 	},
 
 	blur() {
-		this.title.classList.remove('show');
+		// this.title.classList.remove('show');
 		this.body.classList.remove('show');
 		this.clear();
 	}
 };
 
-// ** Object for list module
-const list = {
-	items: [],
-
-	title: '',
-
-	body: '',
-
+// ** Object for note module
+const note = {
 	init() {
+		this.delcareVars();
 		this.cacheDom();
-		this.render();
+		this.renderStored();
+	},
+
+	delcareVars() {
+		(this.items = []), (this.title = ''), (this.index = 0), (this.fav = ''), (this.archived = '');
 	},
 
 	cacheDom() {
-		this.pinnedSection = document.getElementById('favList');
-		this.mainSection = document.getElementById('mainList');
+		this.favSection = document.getElementById('favNotes');
+		this.mainSection = document.getElementById('mainNotes');
+		this.archivedSection = document.getElementById('archivedNotes');
 	},
 
-	// * Method used to render elements stored in localstorage when page loads
-	render() {
-		const itemsExist = storage.get();
-		const items = JSON.parse(itemsExist);
-		if (itemsExist && items.length >= 1) {
-			this.items = items;
-			for (const item of items) {
-				const addItem = this.createItem(item.title, item.body, item.index);
-				this.appendItem(this.mainSection, addItem);
-			}
-		}
+	prepend(parent, element) {
+		parent.prepend(element);
+	},
+
+	append(parent, element) {
+		parent.appendChild(element);
 	},
 
 	// *Method used to create a list element with alll necesarry children
@@ -137,36 +148,83 @@ const list = {
 		element.appendChildren(divCont, [ listItemTitle, listItemBody ]);
 		element.appendChildren(listContainer, [ divCont ]);
 
-		//Prepending item to list
+		//Return list item
 		return listContainer;
 	},
 
-	prependItem(parent, element) {
-		parent.prepend(element);
-	},
-
-	appendItem(parent, element) {
-		parent.appendChild(element);
-	},
-
 	// ** Method used to check text content of elemnt to see if its >= to "n" values
-	checkField(field, length, callback) {
+	checkBody(field, length, callback) {
 		if (field.textContent.length >= length) {
 			callback();
 		}
 	},
 
-	addItem() {
-		this.checkField(form.title, 0, () => {
-			this.title = form.title.textContent;
-		});
+	checkType(button, objectKey) {
+		if (button.className === 'true') {
+			this[objectKey] = true;
+		} else {
+			this[objectKey] = false;
+		}
+	},
 
-		this.checkField(form.body, 1, () => {
-			this.body = form.body.textContent;
-			this.items.unshift({ title: this.title, body: this.body, index: this.items.length });
-			newItem = this.createItem(this.title, this.body, this.items.length);
-			this.prependItem(this.mainSection, newItem);
+	storeType() {
+		// check if pinned button clicked
+		this.checkType(form.archiveButton, 'archived');
+
+		//check if fav button clicked
+		this.checkType(form.favButton, 'fav');
+	},
+
+	render(parent, noteTitle, noteBody, archived, faved) {
+		this.title = noteTitle;
+		this.body = noteBody;
+		this.index++;
+		const note = this.createItem(noteTitle, noteBody, this.index);
+		this.prepend(parent, note);
+		this.items.unshift({
+			title: noteTitle,
+			body: noteBody,
+			index: this.index,
+			archived: archived,
+			fav: faved
 		});
+		storage.update();
+		form.blur();
+	},
+
+	// * Method used to render elements stored in localstorage when page loads
+	renderStored() {
+		const itemString = storage.get();
+		const itemArray = JSON.parse(itemString);
+		if (Array.isArray(itemArray) && itemArray.length >= 1) {
+			this.items = itemArray;
+			for (const item of itemArray) {
+				const addItem = this.createItem(item.title, item.body, item.index);
+				if (item.fav === true) {
+					this.append(this.favSection, addItem);
+				} else if (item.archived === true) {
+					this.append(this.archivedSection, addItem);
+				} else {
+					this.append(this.mainSection, addItem);
+				}
+			}
+		} else {
+			storage.clear();
+		}
+	},
+
+	add() {
+		const formTitleText = form.title.textContent;
+		const formBodyText = form.body.textContent;
+		const formBodyLength = formBodyText.length;
+		this.storeType();
+		if (formBodyLength >= 1 && this.fav === true) {
+			this.render(this.favSection, formTitleText, formBodyText, false, true);
+		} else if (formBodyLength >= 1 && this.archived === true) {
+			this.render(this.archivedSection, formTitleText, formBodyText, true, false);
+		} else if (formBodyLength >= 1 && this.archived === false && this.fav === false) {
+			this.render(this.mainSection, formTitleText, formBodyText, false, false);
+		}
 	}
 };
 
@@ -179,11 +237,12 @@ const app = {
 
 	initModules() {
 		form.init();
-		list.init();
+		note.init();
 	},
 
 	bindEvents() {
 		document.addEventListener('click', this.onFormBlur);
+		form.container.addEventListener('click', form.addButtonClass.bind(form));
 	},
 
 	onFormBlur(e) {
@@ -192,9 +251,7 @@ const app = {
 		if (targetClicked) {
 			form.focus();
 		} else {
-			list.addItem();
-			storage.update();
-			form.blur();
+			note.add();
 		}
 	}
 };
