@@ -1,0 +1,23 @@
+.btn
+  outline: none
+  border: none
+  background: transparent
+  display: inline-block
+  text-align: center
+  cursor: pointer
+
+.btn-green
+  background: $color-green
+  height: 48px
+  width: 48px
+  line-height: 54px
+
+.btn-round
+  border-radius: 100%
+
+.pad-left-18
+  padding-left: 18px
+
+@each $type, $size in $heading-sizes
+  .#{$type}
+    font-size: unquote($size) 

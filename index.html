@@ -10,7 +10,8 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/normalize.css">
   <link rel="stylesheet" href="./styles/font.css">
-  <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./styles/css/main.css">
+  <!-- <link rel="stylesheet" href="./styles/style.css"> -->
   <title>Keip - Simple Local Storage Notes App</title>
 </head>
 
@@ -20,7 +21,7 @@
       <ul class="topBar__cont">
         <li class="topBar__nav">
           <div class="topBar__nav-cont">
-            <div class="topBar__nav-burger"><img src="./vect/burger.svg" alt="burger menu"></div>
+            <div class="topBar__nav-burger btn btn-green btn-round"><img src="./vect/burger.svg" alt="burger menu"></div>
             <div class="topBar__nav-logo"><img src="./vect/logo.svg" alt="Keip Logo"></div>
           </div>
         </li>
@@ -30,8 +31,8 @@
             <li class="topBar__input-title-cont">
               <div id="topBar__input-title" contenteditable="true" tabindex="1" data-text="Take a note"></div>
               <ul>
-                <li><img src="./vect/archive.svg" alt="" id="topBar__button-archive"></li>
-                <li><img src="./vect/star_favourite.svg" alt="" id="topBar__button-fav"></li>
+                <li class="topBar__button"><img src="./vect/archive.svg" alt="" id="topBar__button-archive"></li>
+                <li class="topBar__button"><img src="./vect/star_favourite.svg" alt="" id="topBar__button-fav"></li>
               </ul>
             </li>
             <li class="topBar__input-body-cont">
@@ -43,56 +44,61 @@
 
         <li class="topBar__search">
           <input class="topBar__search-input" type="search" name="" id="" placeholder="Search Notes">
-          <button class="topBar__search-button"><img src="./vect/search.svg" alt="search icon"></button>
+          <button class="topBar__search-button btn btn-green btn-round"><img src="./vect/search.svg" alt="search icon"></button>
         </li>
       </ul>
     </header>
 
-    <main>
-      <nav>
-        <ul>
-          <li>
-            <a href="">
-              <i></i><span>All Notes</span>
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i></i><span>Favourites</span>
-            </a>
-          </li>
-          <li><a href="">
-              <i></i><span>Archived</span></a>
-          </li>
-          <li>
-            <a href="">
-              <i></i><span>Trash</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <nav class="nav">
+      <ul>
+        <li class="nav__item active">
+          <i class="nav__item-img"><img src="./vect/all-notes.svg" alt="" height="20px"></i>
+          <span class="nav__item-text">All Notes</span>
+        </li>
+        <li class="nav__item">
+          <i class="nav__item-img"><img src="./vect/star_favourite.svg" alt="" height="20px"></i>
+          <span class="nav__item-text">Favourites</span>
+        </li>
+        <li class="nav__item">
+          <i class="nav__item-img"><img src="./vect/archive.svg" alt="" height="20px"></i>
+          <span class="nav__item-text">Archived</span></a>
+        </li>
+        <li class="nav__item">
+          <i class="nav__item-img"><img src="./vect/trash.svg" alt="" height="20px"></i>
+          <span class="nav__item-text">Trash</span>
+        </li>
+      </ul>
+    </nav>
 
-      <section class="listSection">
-        <section>
-          <h2 class="section__h2 h4">Favourites</h2>
-          <ul id="favNotes">
-          </ul>
+
+    <div class="listSection">
+      <section>
+        <h2 class="listSection__h2 h4 pad-left-18">Favourites</h2>
+        <ul id="favNotes">
+        </ul>
       </section>
         
       <section>
-        <h2 class="section__h2 h4">Other Notes</h2>
+        <h2 class="listSection__h2 h4 pad-left-18">Other Notes</h2>
         <ul id="mainNotes">
         </ul>
       </section>
 
       <section>
-        <h2 class="section__h2 h4">Archived Notes</h2>
+        <h2 class="listSection__h2 h4 pad-left-18">Archived Notes</h2>
         <ul id="archivedNotes">
         </ul>
       </section>
 
-      </section>
-    </main>
+    </div>
+
+    <footer class="footer">
+      <p>
+        Product of Jamaica <br> 
+        Copyright 2019 - <a href="mailto:makmorrison@gmail.com">Makesi Morrison</a>
+      </p>
+
+    </footer>
   <script src="./main.js"></script>
 </body>
 

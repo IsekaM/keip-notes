@@ -1,0 +1,206 @@
+// *** Simple Resets
+
+*
+  box-sizing: border-box
+  font-family: $base-font-family
+
+html
+  min-height: 100%
+
+body
+  padding: 0px
+  margin: 0px
+  font-size: $base-font-size
+  line-height: $base-line-height
+  background-color: $color-white
+  color: $color-black
+
+ul
+  margin: 0px
+  padding: 0px
+
+  li
+    list-style: none
+
+a
+  text-decoration: none
+  color: $color-grey
+
+// *** Header Styles
+
+.topBar
+  height: 120px
+  padding: 0px 36px
+  border-bottom: 1px solid $color-grey3
+  position: fixed
+  top: 0px
+  left: 0px
+  width: 100%
+  background-color: $color-white
+  z-index: 2
+
+.topBar__cont
+  @extend %flex-cont-center
+  justify-content: space-between
+  // align-items: center
+  height: 100%
+
+#topBar__input-cont
+  padding: 20px
+  border: 1px solid $color-grey3
+  border-radius: 10px
+  box-shadow: 0px 2px 4px transparentize($color-black, 0.90)
+  position: absolute
+  top: 22.5px
+  left: 50%
+  transform: translateX(-49%)
+  background: $color-white
+
+.topBar__nav-cont
+  @extend %flex-cont-center
+
+.topBar__nav-logo
+  margin-top: 5px
+  margin-left: 24px
+
+.topBar__input-title-cont
+  width: 600px
+  min-width: 200px
+  @extend %flex-cont
+  justify-content: space-between
+
+.topBar__input-title-cont ul
+  @extend %flex-cont
+  justify-content: flex-end
+
+#topBar__input-title
+  min-height: 26px
+  font-weight: $bold
+  color: $color-grey
+  flex: 10 1 0
+
+#topBar__input-body
+  height: 0px
+  overflow: hidden
+  transition: height 400ms ease-in
+
+  &.show
+    min-height: 100px
+    padding-top: 15px
+
+#topBar__input-title
+  &:empty:not(:focus)::before
+    background: url('../../vect/icon_plus.svg') left center / 16px no-repeat
+    padding-left: 36px
+
+#topBar__input-title, #topBar__input-body
+  &:empty:not(:focus)::before
+    content: attr(data-text)
+
+.topBar__button
+  cursor: pointer
+  +trans(filter, 200ms)
+
+  &:first-of-type
+    margin-right: 15px
+
+.topBar__button img
+  filter: opacity(0.60)
+
+  &:hover
+    filter: opacity(0.85)
+
+  &.true
+    filter: opacity(1)
+
+.topBar__search-input
+  display: none
+
+// ** Navbar Styles
+
+.nav
+  padding-top: 180px
+  padding-right: 18px
+  position: fixed
+  top: 0px
+  left: 0px
+  height: 100%
+  width: 314px
+  border-right: 1px solid $color-grey3
+  z-index: 2
+
+.nav__item-img
+  display: inline-block
+  margin-right: 15px
+  filter: opacity(0.60)
+
+.nav__item-text
+  display: inline-block
+  transform: translateY(-2px)
+
+.nav__item
+  font-size: unquote(map-get($heading-sizes, "h3"))
+  font-weight: bold
+  color: $color-grey
+  padding-left: 36px
+  margin-bottom: 24px
+  position: relative
+  cursor: pointer
+
+  &:hover::before
+    content: ''
+    position: absolute
+    left: 0px
+    height: 100%
+    width: 12px
+    border-radius: 0px 4px 4px 0px
+    background-color: $color-green
+
+  &:hover > .nav__item-text, .active > .nav__item-text
+    color: $color-black !important
+
+  &:hover > .nav__item-img, .active > .nav__item-img
+    filter: opacity(1) !important
+
+// ** List Section Styles
+
+.listSection
+  position: absolute
+  top: 120px
+  left: 314px
+  width: calc(100% - 314px)
+  padding: 60px 18px 36px 18px
+
+#favNotes, #mainNotes, #archivedNotes
+  @extend %flex-cont
+  flex-wrap: wrap
+
+.listItem
+  display: inline-block
+  width: auto
+  flex-basis: calc(100% / 5)
+  padding: 0px 18px
+
+.listItem__cont
+  padding: 13px 20px 20px
+  border: 1px solid $color-grey3
+  border-radius: 10px
+  margin-bottom: 36px
+
+.listItem__title
+  font-weight: $bold
+  margin-bottom: 15px
+  min-height: 3px
+  font-size: unquote(map-get($heading-sizes, "h4"))
+
+// ** footer
+
+.footer
+  position: fixed
+  z-index: 2
+  left: 36px
+  bottom: 60px
+  font-weight: $bold
+
+  p
+    margin-bottom: 0px

@@ -1,0 +1,32 @@
+// Font weights
+$light: 100
+$regular: 400
+$bold: 600
+
+// Base Font
+$base-font-family: "HK Grotesk", "Segoe UI", Arial, Helvetica, sans-serif
+$base-font-weight: $regular
+$base-font-size: 16px
+$base-line-height: 1.6
+
+//Font Sizes
+$heading-sizes: ("h1": "31px", "h2": "25px", "h3": "20px", "h4": $base-font-size)
+
+// Colors
+$color-yellow: #ffcb23
+$color-green: #03a84a
+$color-black: #2d3142
+$color-grey: #7c7f8a
+$color-white: #fefdfe
+$color-grey3: #dfe1eb
+
+//Extends
+%flex-cont
+  display: flex
+  flex: 1 1 0
+
+%flex-cont-center
+  @extend %flex-cont
+  align-items: center
+=trans($property, $time)
+  transition: $property $time ease-in

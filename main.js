@@ -84,7 +84,7 @@ const form = {
 	},
 
 	focus() {
-		this.title.classList.add('show');
+		// this.title.classList.add('show');
 		this.body.classList.add('show');
 	},
 
