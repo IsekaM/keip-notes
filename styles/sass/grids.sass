@@ -1,0 +1,24 @@
+@import "./_base"
+@import "./_mixins"
+
+/******Grid Systems**********/
++container-defaults()
+
++container-widths( map-get($container-max-widths, xl), map-get($grid-breakpoints, xl) )
++container-widths( map-get($container-max-widths, lg), map-get($grid-breakpoints, lg) )
++container-widths( map-get($container-max-widths, md), map-get($grid-breakpoints, md) )
++container-widths( map-get($container-max-widths, sm), map-get($grid-breakpoints, sm) )
+
+.row
+  +flex-row(flex-start, flex-start, wrap)
+
+// Flex Grid Base Styles
++flex-grid-ready($name: $grid-name, $gap: $grid-gap)
+
+
+// Flex Grid Breakpoint 
++flex-grid( xl, $grid-columns, map-get($grid-breakpoints, xl) )
++flex-grid( lg, $grid-columns, map-get($grid-breakpoints, lg) )
++flex-grid( md, $grid-columns, map-get($grid-breakpoints, md) )
++flex-grid( sm, $grid-columns, map-get($grid-breakpoints, sm) )
++flex-grid( xs, $grid-columns, map-get($grid-breakpoints, xs) )

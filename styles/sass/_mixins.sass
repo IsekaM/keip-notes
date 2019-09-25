@@ -1,0 +1,83 @@
+//Mixins
+=container-defaults($padding: $grid-gap)
+  .container
+    margin: 0 auto
+    padding: 0px $padding
+    width: 100%
+
+=container-widths($breakpoint, $max-width)
+  @media screen and ( min-width: $max-width )
+    .container
+      max-width: $breakpoint
+
+=flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
+  @if $jc or $jc == true
+    justify-content: flex-start 
+  @if $align-items or $align-start == true 
+    align-items: flex-start
+  @if $wrap or $wrap == true 
+    flex-wrap: wrap
+
+=flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
+  @if $jc or $jc == true
+    justify-content: flex-start 
+  @if $align-items or $align-start == true 
+    align-items: flex-start
+  @if $wrap or $wrap == true 
+    flex-wrap: wrap
+
+=flex-grid($type, $columns, $breakpoint)
+  @media screen and (min-width: $breakpoint)
+    @for $i from 1 through $columns
+      $num: $i
+      $class: #{$grid-name}#{$type}-#{$num}   
+      .#{$class}
+        width: calc(100% / (#{$num} / 12)) 
+
+=flex-grid-ready($name: $grid-name, $gap: $grid-gap)
+  [class^=#{$name}]
+    box-sizing: border-box
+    width: 100%
+    padding: 0px $gap
+
+=grey-border($size, $position: null, $radius: null)
+  $string: $size solid $color-grey3
+  @if $position
+    border-#{$position}: $string
+  @else
+    border: $string
+  @if $radius
+    border-radius: $radius
+
+=header-defaults()
+ @each $item in $header-sizes
+  $header: map-get($item, header)
+  $font-size: map-get($item, size)
+  $line-height: map-get($item, leading)
+  .#{$header}
+    font-size: $font-size
+    line-height: $line-height 
+    margin-top: 0px
+    margin-bottom: round( 0.75 * $font-size )
+
+=mQD($width)
+  @each $val in $width
+    @media screen and (max-width: #{$val})
+      @content
+
+=mQM($width)
+  @each $val in $width
+    @media screen and (min-wdth: #{$val})
+      @content
+
+=position($position, $cords, $width: null, $height: null)
+  position: $position
+  @if $width
+    width: $width
+  @if $height
+    height: $height
+  @each $key, $val in $cords
+    #{$key}: $val
+
+=trans($property, $time)
+  transition: $property $time ease

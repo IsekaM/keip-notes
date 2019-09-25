@@ -10,7 +10,7 @@ $base-font-size: 16px
 $base-line-height: 1.6
 
 //Font Sizes
-$heading-sizes: ("h1": "31px", "h2": "25px", "h3": "20px", "h4": $base-font-size)
+$heading-sizes: ("h1": 31px, "h2": 25px, "h3": 20px, "h4": $base-font-size)
 
 // Colors
 $color-yellow: #ffcb23
@@ -20,6 +20,20 @@ $color-grey: #7c7f8a
 $color-white: #fefdfe
 $color-grey3: #dfe1eb
 
+//Font Sizes
+$header-sizes: ( (header: h1, size: 31px, leading: 1.2), (header: h2, size: 25px, leading: 1.2), (header: h3, size: 20px, leading: 1.25), (header: h4, size: 16px, leading: 1.4) )
+
+// Grid System
+$grid-breakpoints: ( xl: 1200px, lg: 960px, md: 720px, sm: 540px, xs: 0px )
+$grid-columns: 12
+$grid-gap: 18px
+$grid-name: col--
+$container-max-widths: ( xl: 1080px, lg: 920px, md: 640px, sm: 480px )
+
+//Companents
+$button-round-radius: 10px
+$container-width: 1200px
+
 //Extends
 %flex-cont
   display: flex
@@ -28,5 +42,4 @@ $color-grey3: #dfe1eb
 %flex-cont-center
   @extend %flex-cont
   align-items: center
-=trans($property, $time)
-  transition: $property $time ease-in
+

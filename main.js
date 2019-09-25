@@ -52,6 +52,20 @@ const element = {
 		for (const child of children) {
 			parent.appendChild(child);
 		}
+	},
+
+	addClasses(elements, className) {
+		const parents = [ ...elements ];
+		for (const parent of parents) {
+			parent.classList.add(className);
+		}
+	},
+
+	removeClasses(elements, className) {
+		const parents = [ ...elements ];
+		for (const parent of parents) {
+			parent.classList.remove(className);
+		}
 	}
 };
 
@@ -83,8 +97,11 @@ const form = {
 		this.checkButtonClass(this.favButton, this.archiveButton, target);
 	},
 
+	removeButtonClass() {
+		element.removeClasses([ this.favButton, this.archiveButton ], 'true');
+	},
+
 	focus() {
-		// this.title.classList.add('show');
 		this.body.classList.add('show');
 	},
 
@@ -94,8 +111,8 @@ const form = {
 	},
 
 	blur() {
-		// this.title.classList.remove('show');
 		this.body.classList.remove('show');
+		this.removeButtonClass();
 		this.clear();
 	}
 };
@@ -113,6 +130,10 @@ const note = {
 	},
 
 	cacheDom() {
+		this.favSectionCont = document.querySelector('.listSection__favs');
+		this.archivedSectionCont = document.querySelector('.listSection__archived');
+		this.mainSectionCont = document.querySelector('.listSection__main');
+		this.trashedSectionCont = document.querySelector('.listSection__trashed');
 		this.favSection = document.getElementById('favNotes');
 		this.mainSection = document.getElementById('mainNotes');
 		this.archivedSection = document.getElementById('archivedNotes');
@@ -189,7 +210,7 @@ const note = {
 			fav: faved
 		});
 		storage.update();
-		form.blur();
+		// form.blur();
 	},
 
 	// * Method used to render elements stored in localstorage when page loads
@@ -225,6 +246,63 @@ const note = {
 		} else if (formBodyLength >= 1 && this.archived === false && this.fav === false) {
 			this.render(this.mainSection, formTitleText, formBodyText, false, false);
 		}
+	},
+
+	edit() {
+		const noteTitle = [ ...document.getElementsByClassName('listItem__title') ];
+		const noteBody = [ ...document.getElementsByClassName('listItem__title') ];
+
+		noteTitle.forEach(updateTitle);
+	}
+};
+
+const nav = {
+	init() {
+		this.cacheDom();
+		this.bindEvents();
+	},
+
+	cacheDom() {
+		this.navCont = document.querySelector('.nav__cont');
+		this.allNotes = document.getElementById('nav__item-all');
+		this.favs = document.getElementById('nav__item-fav');
+		this.archived = document.getElementById('nav__item-archived');
+		this.trash = document.getElementById('nav__item-trash');
+		this.items = [ ...document.getElementsByClassName('nav__item') ];
+	},
+
+	bindEvents() {
+		for (const item of this.items) {
+			item.addEventListener('click', this.toggleSection.bind(this), true);
+		}
+	},
+
+	toggleSection(e) {
+		// e.stopPropagation();
+		const target = e.target;
+		const id = target.id;
+		const index = this.items.findIndex((x) => x.id === id);
+		const sections = [
+			note.mainSectionCont,
+			note.favSectionCont,
+			note.archivedSectionCont,
+			note.trashedSectionCont
+		];
+
+		console.log(index);
+
+		this.items.filter((x) => x.classList.contains('active')).map((x) => x.classList.remove('active'));
+		sections.map((x) => x.classList.remove('show-section'));
+
+		if (index === 0) {
+			sections
+				.filter((x) => x.classList.contains('listSection__favs') || x.classList.contains('listSection__main'))
+				.map((x) => x.classList.add('show-section'));
+			target.classList.add('active');
+		} else {
+			target.classList.add('active');
+			sections[index].classList.add('show-section');
+		}
 	}
 };
 
@@ -238,6 +316,7 @@ const app = {
 	initModules() {
 		form.init();
 		note.init();
+		nav.init();
 	},
 
 	bindEvents() {
@@ -252,6 +331,7 @@ const app = {
 			form.focus();
 		} else {
 			note.add();
+			form.blur();
 		}
 	}
 };

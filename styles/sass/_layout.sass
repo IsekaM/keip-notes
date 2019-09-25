@@ -14,6 +14,7 @@ body
   line-height: $base-line-height
   background-color: $color-white
   color: $color-black
+  overflow-x: hidden
 
 ul
   margin: 0px
@@ -29,13 +30,9 @@ a
 // *** Header Styles
 
 .topBar
-  height: 120px
   padding: 0px 36px
-  border-bottom: 1px solid $color-grey3
-  position: fixed
-  top: 0px
-  left: 0px
-  width: 100%
+  +grey-border(1px, bottom)
+  +position(fixed, (top: 0px, left: 0px), 100%, 120px)
   background-color: $color-white
   z-index: 2
 
@@ -47,13 +44,10 @@ a
 
 #topBar__input-cont
   padding: 20px
-  border: 1px solid $color-grey3
-  border-radius: 10px
   box-shadow: 0px 2px 4px transparentize($color-black, 0.90)
-  position: absolute
-  top: 22.5px
-  left: 50%
-  transform: translateX(-49%)
+  +position(absolute, (top: 22.5px, left: 50%))
+  +grey-border(1px, null, 10px)
+  transform: translateX(-37%)
   background: $color-white
 
 .topBar__nav-cont
@@ -82,11 +76,16 @@ a
 #topBar__input-body
   height: 0px
   overflow: hidden
-  transition: height 400ms ease-in
+  +trans(min-height, 2s)
 
   &.show
     min-height: 100px
     padding-top: 15px
+
+#topBar__input-title, #topBar__input-body
+  white-space: pre-wrap
+  word-wrap: break-word
+  overflow-wrap: break-word
 
 #topBar__input-title
   &:empty:not(:focus)::before
@@ -121,13 +120,12 @@ a
 .nav
   padding-top: 180px
   padding-right: 18px
-  position: fixed
-  top: 0px
-  left: 0px
-  height: 100%
-  width: 314px
-  border-right: 1px solid $color-grey3
+  +position(fixed, (top: 0px, left: 0px), 314px, 100%)
+  +grey-border(1px, right)
   z-index: 2
+
+  ul 
+    height: 100%
 
 .nav__item-img
   display: inline-block
@@ -139,68 +137,77 @@ a
   transform: translateY(-2px)
 
 .nav__item
-  font-size: unquote(map-get($heading-sizes, "h3"))
+  font-size: map-get($heading-sizes, "h3")
   font-weight: bold
   color: $color-grey
   padding-left: 36px
-  margin-bottom: 24px
+  padding-bottom: 24px
   position: relative
   cursor: pointer
 
   &:hover::before
     content: ''
-    position: absolute
-    left: 0px
-    height: 100%
-    width: 12px
+    +position(absolute, (left: 0px), 12px, 0px)
     border-radius: 0px 4px 4px 0px
     background-color: $color-green
+    z-index: 10000
 
-  &:hover > .nav__item-text, .active > .nav__item-text
-    color: $color-black !important
+  &:hover > .nav__item-text, &.active > &-text
+    color: $color-black
 
-  &:hover > .nav__item-img, .active > .nav__item-img
-    filter: opacity(1) !important
+  &:hover > .nav__item-img, &.active > &-img
+    filter: opacity(1)
 
 // ** List Section Styles
 
 .listSection
+  +position(absolute, (top: 120px, left: 314px), calc(100% - 314px))
   position: absolute
-  top: 120px
-  left: 314px
-  width: calc(100% - 314px)
   padding: 60px 18px 36px 18px
+
+  &__main, &__archived, &__favs, &__trashed
+    display: none
+    &.show-section
+      display: block
 
 #favNotes, #mainNotes, #archivedNotes
   @extend %flex-cont
   flex-wrap: wrap
 
+  &.show-section
+    display: flex
+  
+
 .listItem
   display: inline-block
-  width: auto
-  flex-basis: calc(100% / 5)
+  // width: auto
+  width: calc(100% / 5)
   padding: 0px 18px
 
 .listItem__cont
   padding: 13px 20px 20px
-  border: 1px solid $color-grey3
-  border-radius: 10px
+  +grey-border(1px, null, 10px)
   margin-bottom: 36px
 
 .listItem__title
   font-weight: $bold
   margin-bottom: 15px
   min-height: 3px
-  font-size: unquote(map-get($heading-sizes, "h4"))
+  font-size: map-get($heading-sizes, "h4")
+
+.listItem__title, .listItem__body
+  white-space: pre-wrap
+  word-wrap: break-word
+  overflow-wrap: break-word
 
 // ** footer
 
 .footer
-  position: fixed
+  margin-top: auto
   z-index: 2
-  left: 36px
-  bottom: 60px
   font-weight: $bold
 
   p
+    +position(relative, (left: 26px, bottom: 0px))
     margin-bottom: 0px
+    font-weight: $regular

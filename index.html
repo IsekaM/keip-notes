@@ -7,9 +7,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/normalize.css">
-  <link rel="stylesheet" href="./styles/font.css">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,900&display=swap" rel="stylesheet"> -->
+  <link rel="stylesheet" href="./styles/css/normalize.css">
+  <link rel="stylesheet" href="./styles/css/font.css">
   <link rel="stylesheet" href="./styles/css/main.css">
   <!-- <link rel="stylesheet" href="./styles/style.css"> -->
   <title>Keip - Simple Local Storage Notes App</title>
@@ -21,7 +21,7 @@
       <ul class="topBar__cont">
         <li class="topBar__nav">
           <div class="topBar__nav-cont">
-            <div class="topBar__nav-burger btn btn-green btn-round"><img src="./vect/burger.svg" alt="burger menu"></div>
+            <div class="topBar__nav-burger btn btn--green btn--circle"><img src="./vect/burger.svg" alt="burger menu"></div>
             <div class="topBar__nav-logo"><img src="./vect/logo.svg" alt="Keip Logo"></div>
           </div>
         </li>
@@ -44,61 +44,67 @@
 
         <li class="topBar__search">
           <input class="topBar__search-input" type="search" name="" id="" placeholder="Search Notes">
-          <button class="topBar__search-button btn btn-green btn-round"><img src="./vect/search.svg" alt="search icon"></button>
+          <button class="topBar__search-button btn btn--green btn--circle"><img src="./vect/search.svg" alt="search icon"></button>
         </li>
       </ul>
     </header>
 
     <nav class="nav">
-      <ul>
-        <li class="nav__item active">
+      <ul class="nav__cont">
+        <li class="nav__item active" id="nav__item-all">
           <i class="nav__item-img"><img src="./vect/all-notes.svg" alt="" height="20px"></i>
           <span class="nav__item-text">All Notes</span>
         </li>
-        <li class="nav__item">
+        <li class="nav__item" id="nav__item-fav"> 
           <i class="nav__item-img"><img src="./vect/star_favourite.svg" alt="" height="20px"></i>
           <span class="nav__item-text">Favourites</span>
         </li>
-        <li class="nav__item">
+        <li class="nav__item" id="nav__item-archived">
           <i class="nav__item-img"><img src="./vect/archive.svg" alt="" height="20px"></i>
           <span class="nav__item-text">Archived</span></a>
         </li>
-        <li class="nav__item">
+        <li class="nav__item" id="nav__item-trash">
           <i class="nav__item-img"><img src="./vect/trash.svg" alt="" height="20px"></i>
           <span class="nav__item-text">Trash</span>
         </li>
       </ul>
+      <div class="footer">
+        <p>
+          Product of Jamaica <br>
+          Copyright 2019 - <a href="mailto:makmorrison@gmail.com">Makesi Morrison</a>
+        </p>
+      </div>
     </nav>
 
 
     <div class="listSection">
-      <section>
+      <section class="listSection__favs show-section">
         <h2 class="listSection__h2 h4 pad-left-18">Favourites</h2>
         <ul id="favNotes">
         </ul>
       </section>
         
-      <section>
+      <section class="listSection__main show-section">
         <h2 class="listSection__h2 h4 pad-left-18">Other Notes</h2>
         <ul id="mainNotes">
         </ul>
       </section>
 
-      <section>
+      <section class="listSection__archived">
         <h2 class="listSection__h2 h4 pad-left-18">Archived Notes</h2>
         <ul id="archivedNotes">
         </ul>
       </section>
 
+      <section class="listSection__trashed">
+        <h2 class="listSection__h2 h4 pad-left-18">Trashed Notes</h2>
+        <ul id="trashedNotes">
+        </ul>
+      </section>
+
     </div>
 
-    <footer class="footer">
-      <p>
-        Product of Jamaica <br> 
-        Copyright 2019 - <a href="mailto:makmorrison@gmail.com">Makesi Morrison</a>
-      </p>
 
-    </footer>
   <script src="./main.js"></script>
 </body>
 
