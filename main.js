@@ -87,7 +87,6 @@ const form = {
 		if (target === button) {
 			button.classList.toggle('true');
 			otherButton.classList.remove('true');
-			console.log(target);
 		}
 	},
 
@@ -123,6 +122,7 @@ const note = {
 		this.delcareVars();
 		this.cacheDom();
 		this.renderStored();
+		this.bindEvents();
 	},
 
 	delcareVars() {
@@ -139,6 +139,14 @@ const note = {
 		this.archivedSection = document.getElementById('archivedNotes');
 	},
 
+	bindEvents() {
+		const noteItems = document.getElementsByClassName('listItem');
+		for (item of noteItems) {
+			item.addEventListener('click', this.storeIndex.bind(this));
+			item.addEventListener('keyup', this.edit.bind(this));
+		}
+	},
+
 	prepend(parent, element) {
 		parent.prepend(element);
 	},
@@ -148,7 +156,7 @@ const note = {
 	},
 
 	// *Method used to create a list element with alll necesarry children
-	createItem(title = form.title.textContent, body = form.body.textContent, index = this.items.length) {
+	createItem(title = form.title.textContent, body = form.body.textContent) {
 		//Making parent and child elements to hold note/list item
 		const listContainer = element.create('li');
 		const divCont = element.create('div');
@@ -156,7 +164,7 @@ const note = {
 		const listItemBody = element.create('div');
 
 		//Adding attributes to eatch element
-		element.attributes(listContainer, { class: 'listItem', 'data-listIndex': index });
+		element.attributes(listContainer, { class: 'listItem' });
 		element.attributes(divCont, { class: 'listItem__cont' });
 		element.attributes(listItemTitle, { class: 'listItem__title', contenteditable: 'true' });
 		element.attributes(listItemBody, { class: 'listItem__body', contenteditable: 'true' });
@@ -199,13 +207,11 @@ const note = {
 	render(parent, noteTitle, noteBody, archived, faved) {
 		this.title = noteTitle;
 		this.body = noteBody;
-		this.index++;
-		const note = this.createItem(noteTitle, noteBody, this.index);
+		const note = this.createItem(noteTitle, noteBody);
 		this.prepend(parent, note);
 		this.items.unshift({
 			title: noteTitle,
 			body: noteBody,
-			index: this.index,
 			archived: archived,
 			fav: faved
 		});
@@ -220,7 +226,7 @@ const note = {
 		if (Array.isArray(itemArray) && itemArray.length >= 1) {
 			this.items = itemArray;
 			for (const item of itemArray) {
-				const addItem = this.createItem(item.title, item.body, item.index);
+				const addItem = this.createItem(item.title, item.body);
 				if (item.fav === true) {
 					this.append(this.favSection, addItem);
 				} else if (item.archived === true) {
@@ -238,6 +244,7 @@ const note = {
 		const formTitleText = form.title.textContent;
 		const formBodyText = form.body.textContent;
 		const formBodyLength = formBodyText.length;
+		const noteExist = this.items.filter((x) => x.title === formTitleText && x.body === formBodyText); // come back to this
 		this.storeType();
 		if (formBodyLength >= 1 && this.fav === true) {
 			this.render(this.favSection, formTitleText, formBodyText, false, true);
@@ -248,11 +255,35 @@ const note = {
 		}
 	},
 
-	edit() {
-		const noteTitle = [ ...document.getElementsByClassName('listItem__title') ];
-		const noteBody = [ ...document.getElementsByClassName('listItem__title') ];
+	storeIndex(e) {
+		e.stopPropagation();
+		const target = e.target;
+		const that = this;
+		function getIndex(title, body) {
+			that.index = that.items.findIndex((x) => x.title === title && x.body === body);
+		}
 
-		noteTitle.forEach(updateTitle);
+		if (target.className === 'listItem__title') {
+			const title = target.textContent;
+			const body = target.nextSibling.textContent;
+			getIndex(title, body);
+		} else if (target.className === 'listItem__body') {
+			const title = target.previousSibling.textContent;
+			const body = target.textContent;
+			getIndex(title, body);
+		}
+	},
+
+	edit(e) {
+		const target = e.target;
+		const className = target.className;
+		const i = this.index;
+		if (className === 'listItem__title') {
+			this.items[i].title = target.textContent;
+		} else if (className === 'listItem__body') {
+			this.items[i].body = target.textContent;
+		}
+		storage.update();
 	}
 };
 
@@ -268,17 +299,17 @@ const nav = {
 		this.favs = document.getElementById('nav__item-fav');
 		this.archived = document.getElementById('nav__item-archived');
 		this.trash = document.getElementById('nav__item-trash');
-		this.items = [ ...document.getElementsByClassName('nav__item') ];
+		this.items = [ ...document.querySelectorAll('.nav__item') ];
 	},
 
 	bindEvents() {
 		for (const item of this.items) {
-			item.addEventListener('click', this.toggleSection.bind(this), true);
+			item.addEventListener('click', this.toggleSection.bind(this));
 		}
 	},
 
 	toggleSection(e) {
-		// e.stopPropagation();
+		e.stopPropagation();
 		const target = e.target;
 		const id = target.id;
 		const index = this.items.findIndex((x) => x.id === id);
@@ -288,8 +319,6 @@ const nav = {
 			note.archivedSectionCont,
 			note.trashedSectionCont
 		];
-
-		console.log(index);
 
 		this.items.filter((x) => x.classList.contains('active')).map((x) => x.classList.remove('active'));
 		sections.map((x) => x.classList.remove('show-section'));
