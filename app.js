@@ -73,35 +73,49 @@ const element = {
 const form = {
 	init() {
 		this.domCache();
+		this.bindEvents();
 	},
 
 	domCache() {
-		this.container = document.getElementById('topBar__input-cont');
-		this.title = document.getElementById('topBar__input-title');
-		this.body = document.getElementById('topBar__input-body');
-		this.archiveButton = document.getElementById('topBar__button-archive');
-		this.favButton = document.getElementById('topBar__button-fav');
+		this.container = document.querySelector('.form');
+		this.title = document.getElementById('form__title-input');
+		this.body = document.getElementById('form__body-input');
+		this.addNoteButton = document.getElementById('header__button-add');
+		// this.menu = document.getElementById('topBar__menu-cont');
+		this.archiveButton = document.getElementById('form__btn--archive');
+		this.favButton = document.getElementById('form__btn--fav');
+		this.closeButton = document.getElementById('form__menu-btn');
+	},
+
+	bindEvents() {
+		this.addNoteButton.addEventListener('click', this.showForm.bind(this));
 	},
 
 	checkButtonClass(button, otherButton, target) {
-		if (target === button) {
+		if (target === button || button.contains(target)) {
 			button.classList.toggle('true');
 			otherButton.classList.remove('true');
 		}
 	},
 
 	addButtonClass(e) {
+		e.stopPropagation();
 		const target = e.target;
 		this.checkButtonClass(this.archiveButton, this.favButton, target);
 		this.checkButtonClass(this.favButton, this.archiveButton, target);
+		console.log(target);
 	},
 
 	removeButtonClass() {
 		element.removeClasses([ this.favButton, this.archiveButton ], 'true');
 	},
 
+	showForm() {
+		this.container.classList.add('show');
+	},
+
 	focus() {
-		this.body.classList.add('show');
+		element.addClasses([ this.container ], 'show');
 	},
 
 	clear() {
@@ -110,7 +124,7 @@ const form = {
 	},
 
 	blur() {
-		this.body.classList.remove('show');
+		element.removeClasses([ this.menu, this.body ], 'show');
 		this.removeButtonClass();
 		this.clear();
 	}
@@ -137,6 +151,7 @@ const note = {
 		this.favSection = document.getElementById('favNotes');
 		this.mainSection = document.getElementById('mainNotes');
 		this.archivedSection = document.getElementById('archivedNotes');
+		this.allNotes = document.getElementsByClassName('listItem__cont');
 	},
 
 	bindEvents() {
@@ -145,6 +160,7 @@ const note = {
 			item.addEventListener('click', this.storeIndex.bind(this));
 			item.addEventListener('keyup', this.edit.bind(this));
 		}
+		form.closeButton.addEventListener('click', this.add.bind(this));
 	},
 
 	prepend(parent, element) {
@@ -204,7 +220,7 @@ const note = {
 		this.checkType(form.favButton, 'fav');
 	},
 
-	render(parent, noteTitle, noteBody, archived, faved) {
+	render(parent, noteTitle, noteBody, archived = false, faved = false) {
 		this.title = noteTitle;
 		this.body = noteBody;
 		const note = this.createItem(noteTitle, noteBody);
@@ -253,6 +269,7 @@ const note = {
 		} else if (formBodyLength >= 1 && this.archived === false && this.fav === false) {
 			this.render(this.mainSection, formTitleText, formBodyText, false, false);
 		}
+		form.blur();
 	},
 
 	storeIndex(e) {
@@ -311,8 +328,8 @@ const nav = {
 	toggleSection(e) {
 		e.stopPropagation();
 		const target = e.target;
-		const id = target.id;
-		const index = this.items.findIndex((x) => x.id === id);
+		let element;
+		let id;
 		const sections = [
 			note.mainSectionCont,
 			note.favSectionCont,
@@ -320,18 +337,73 @@ const nav = {
 			note.trashedSectionCont
 		];
 
+		if (target.id) {
+			element = target;
+			id = element.id;
+		} else if (target.parentElement.id) {
+			element = target.parentElement;
+			id = element.id;
+			element.classList.add('active');
+		} else if (target.parentElement.parentElement.id) {
+			element = target.parentElement.parentElement;
+			id = element.id;
+		}
+
+		const index = this.items.findIndex(
+			(x) => x.id === id || x.parentElement.id === id || x.parentElement.parentElement.id === id
+		);
+
 		this.items.filter((x) => x.classList.contains('active')).map((x) => x.classList.remove('active'));
 		sections.map((x) => x.classList.remove('show-section'));
 
-		if (index === 0) {
+		if (index === 0 || sections[index].contains(target)) {
 			sections
 				.filter((x) => x.classList.contains('listSection__favs') || x.classList.contains('listSection__main'))
 				.map((x) => x.classList.add('show-section'));
-			target.classList.add('active');
+			element.classList.add('active');
 		} else {
-			target.classList.add('active');
+			element.classList.add('active');
 			sections[index].classList.add('show-section');
 		}
+	}
+};
+
+const search = {
+	init() {
+		this.cacheDom();
+		this.bindEvents();
+	},
+
+	cacheDom() {
+		this.input = document.getElementById('header__search-input');
+	},
+
+	bindEvents() {
+		this.input.addEventListener('keyup', this.filterNotes.bind(this));
+	},
+
+	filterNotes(e) {
+		// console.log(e);
+		const value = e.target.value;
+		const notes = [ ...note.allNotes ];
+		// notes.map( x => )
+		function checkNoteValue(x, value) {
+			const titleText = x.firstChild.textContent;
+			const bodyText = x.firstChild.nextSibling.textContent;
+
+			return titleText.includes(value) || bodyText.includes(value);
+		}
+
+		function displayNote(x) {
+			x.parentNode.style.display = 'block';
+		}
+
+		function hideUnmatchedNotes(x) {
+			x.parentNode.style.display = 'none';
+		}
+
+		notes.map((x) => hideUnmatchedNotes(x));
+		notes.filter((x) => checkNoteValue(x, value)).map((x) => displayNote(x));
 	}
 };
 
@@ -346,21 +418,22 @@ const app = {
 		form.init();
 		note.init();
 		nav.init();
+		search.init();
 	},
 
 	bindEvents() {
 		document.addEventListener('click', this.onFormBlur);
-		form.container.addEventListener('click', form.addButtonClass.bind(form));
+		form.container.addEventListener('click', form.addButtonClass.bind(form), true);
 	},
 
 	onFormBlur(e) {
 		const formContainer = `#${form.container.id}`;
 		const targetClicked = e.target.closest(formContainer);
 		if (targetClicked) {
-			form.focus();
+			return false;
 		} else {
 			note.add();
-			form.blur();
+			// form.blur();
 		}
 	}
 };

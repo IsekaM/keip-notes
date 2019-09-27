@@ -11,20 +11,27 @@
       max-width: $breakpoint
 
 =flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
-  @if $jc or $jc == true
-    justify-content: flex-start 
-  @if $align-items or $align-start == true 
+  display: flex
+  @if $jc == flex-start or $jc == true
+    justify-content: flex-start
+  @else 
+    justify-content: $jc
+  @if $align-items == flex-start or $align-items == true 
     align-items: flex-start
-  @if $wrap or $wrap == true 
+  @else 
+    align-items: $align-items
+  @if $wrap == no-wrap or $wrap == true 
     flex-wrap: wrap
+  @else 
+    flex-wrap: $wrap
 
-=flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
-  @if $jc or $jc == true
-    justify-content: flex-start 
-  @if $align-items or $align-start == true 
-    align-items: flex-start
-  @if $wrap or $wrap == true 
-    flex-wrap: wrap
+// =flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
+//   @if $jc or $jc == true
+//     justify-content: flex-start 
+//   @if $align-items or $align-start == true 
+//     align-items: flex-start
+//   @if $wrap or $wrap == true 
+//     flex-wrap: wrap
 
 =flex-grid($type, $columns, $breakpoint)
   @media screen and (min-width: $breakpoint)
@@ -70,7 +77,7 @@
     @media screen and (min-wdth: #{$val})
       @content
 
-=position($position, $cords, $width: null, $height: null)
+=position($position, $cords: null, $width: null, $height: null)
   position: $position
   @if $width
     width: $width

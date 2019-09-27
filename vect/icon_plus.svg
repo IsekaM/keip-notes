@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16.25" height="16.25" viewBox="0 0 16.25 16.25">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #7c7f8a;
-        stroke: #7c7f8a;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 0.25px;
-      }
-    </style>
-  </defs>
-  <g id="icon_plus" transform="translate(-7.875 -7.875)">
-    <path id="Path_3" data-name="Path 3" class="cls-1" d="M8.889,16.889h6.222v6.222a.889.889,0,0,0,1.778,0V16.889h6.222a.889.889,0,0,0,0-1.778H16.889V8.889a.889.889,0,1,0-1.778,0v6.222H8.889a.889.889,0,1,0,0,1.778Z"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="16.25" height="16.25" viewBox="0 0 16.25 16.25"><g transform="translate(0.125 0.125)"><path d="M8.889,16.889h6.222v6.222a.889.889,0,0,0,1.778,0V16.889h6.222a.889.889,0,0,0,0-1.778H16.889V8.889a.889.889,0,1,0-1.778,0v6.222H8.889a.889.889,0,1,0,0,1.778Z" transform="translate(-8 -8)" fill="#2d3142" stroke="#2d3142" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.25"/></g></svg>

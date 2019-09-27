@@ -3,6 +3,7 @@
 *
   box-sizing: border-box
   font-family: $base-font-family
+  // +trans(all, 500ms)
 
 html
   min-height: 100%
@@ -12,7 +13,7 @@ body
   margin: 0px
   font-size: $base-font-size
   line-height: $base-line-height
-  background-color: $color-white
+  background-color: $color-grey2
   color: $color-black
   overflow-x: hidden
 
@@ -29,91 +30,126 @@ a
 
 // *** Header Styles
 
-.topBar
-  padding: 0px 36px
-  +grey-border(1px, bottom)
-  +position(fixed, (top: 0px, left: 0px), 100%, 120px)
-  background-color: $color-white
-  z-index: 2
+.header
+  +flex-row(true, center, true)
+  +position(fixed, (top: 0px), 100%)
+  padding: 36px 36px 0px 21px
+  align-items: center
+  z-index: 5
 
-.topBar__cont
-  @extend %flex-cont-center
-  justify-content: space-between
-  // align-items: center
-  height: 100%
+.header__nav
+  +flex-row(true, center, true)
 
-#topBar__input-cont
-  padding: 20px
-  box-shadow: 0px 2px 4px transparentize($color-black, 0.90)
-  +position(absolute, (top: 22.5px, left: 50%))
-  +grey-border(1px, null, 10px)
-  transform: translateX(-37%)
-  background: $color-white
+  &-logo
+    margin-top: 4px
 
-.topBar__nav-cont
-  @extend %flex-cont-center
+  &-burger
+    display: inline-block
+    margin-right: 10px
+    padding: 13.5px 15px 12px
+    cursor: pointer
+    border-radius: 10px
 
-.topBar__nav-logo
-  margin-top: 5px
-  margin-left: 24px
+    &:hover
+      background: $color-yellow
 
-.topBar__input-title-cont
-  width: 600px
-  min-width: 200px
-  @extend %flex-cont
-  justify-content: space-between
+.header__search
+  +position(absolute, (left: 350px), )
 
-.topBar__input-title-cont ul
-  @extend %flex-cont
-  justify-content: flex-end
+  &-input
+    height: 48px
+    width: 100%
+    min-width: 480px
+    padding-left: 48px
+    border-radius: 10px
+    border: none
+    box-shadow: 0px 2px 0px $color-grey3
+    background-color: $color-white
+    background-image: url(../../vect/search.svg)
+    background-position: left 20px center
+    background-repeat: no-repeat
 
-#topBar__input-title
-  min-height: 26px
-  font-weight: $bold
-  color: $color-grey
-  flex: 10 1 0
+.header__button
+  +position(absolute, (right: 36px))
 
-#topBar__input-body
-  height: 0px
-  overflow: hidden
-  +trans(min-height, 2s)
+  &-add
+    height: 48px
+    border-radius: 10px
+    box-shadow: 0px 2px 0px $color-grey3
+    +trans(all, 150ms)
+
+    span:first-of-type
+      margin-right: 10px
+
+    &:hover
+      box-shadow: none
+      transform: translateY(2px)
+
+// ** Form Styles
+
+
+
+.form
+  +position(absolute, (left: 0, top: 0), 100%, 100%)
+  background-color: transparentize($color-black, 0.3)
+  z-index: 10
+  +flex-row(center, center, true)
+  visibility: hidden
+  +trans(visibility, 200ms)
 
   &.show
-    min-height: 100px
-    padding-top: 15px
+    visibility: visible
 
-#topBar__input-title, #topBar__input-body
-  white-space: pre-wrap
-  word-wrap: break-word
-  overflow-wrap: break-word
+  [contenteditable="true"]:empty:not(:focus):before
+  content: attr(data-placeholder)
 
-#topBar__input-title
-  &:empty:not(:focus)::before
-    background: url('../../vect/icon_plus.svg') left center / 16px no-repeat
-    padding-left: 36px
+  &__cont
+    background: $color-white
+    opacity: 1 !important
+    width: 100%
+    max-width: 600px
+    padding: 20px
+    background: $color-white
+    border-radius: 10px
+    z-index: 11
 
-#topBar__input-title, #topBar__input-body
-  &:empty:not(:focus)::before
-    content: attr(data-text)
+  &__title
+    background: $color-white
+    +flex-row(space-between, center, true)
+    font-weight: $bold
+    padding-bottom: 20px
+  
+  &__title-input
+    min-height: 20px
+    flex: 10 1 0
 
-.topBar__button
+  &__title-btn
+    +flex-row(flex-end, center, true)
+
+  &__body
+    width: 100%
+
+  &__body-input
+    min-height: 200px
+
+
+.form [contenteditable="true"]:empty:not(:focus):before
+  content: attr(data-placeholder)
+
+.form button
+  background: transparent
+  border: none
   cursor: pointer
-  +trans(filter, 200ms)
 
-  &:first-of-type
-    margin-right: 15px
+  &.true svg path
+    fill: $color-black
 
-.topBar__button img
-  filter: opacity(0.60)
+  svg path 
+    fill: $color-grey
 
-  &:hover
-    filter: opacity(0.85)
+  &:hover > svg path 
+    fill: $color-black 
 
-  &.true
-    filter: opacity(1)
-
-.topBar__search-input
-  display: none
 
 // ** Navbar Styles
 
@@ -121,16 +157,16 @@ a
   padding-top: 180px
   padding-right: 18px
   +position(fixed, (top: 0px, left: 0px), 314px, 100%)
-  +grey-border(1px, right)
+  background: $color-white
+  border-top-right-radius: 20px
   z-index: 2
 
-  ul 
+  ul
     height: 100%
 
 .nav__item-img
   display: inline-block
   margin-right: 15px
-  filter: opacity(0.60)
 
 .nav__item-text
   display: inline-block
@@ -139,24 +175,17 @@ a
 .nav__item
   font-size: map-get($heading-sizes, "h3")
   font-weight: bold
-  color: $color-grey
-  padding-left: 36px
-  padding-bottom: 24px
-  position: relative
+  color: $color-black
+  padding: 15px 0px 10px 36px
   cursor: pointer
 
-  &:hover::before
-    content: ''
-    +position(absolute, (left: 0px), 12px, 0px)
-    border-radius: 0px 4px 4px 0px
-    background-color: $color-green
-    z-index: 10000
+  &:hover
+    border-radius: 0px 10px 10px 0px
+    background-color: $color-grey2
 
-  &:hover > .nav__item-text, &.active > &-text
-    color: $color-black
-
-  &:hover > .nav__item-img, &.active > &-img
-    filter: opacity(1)
+  &.active
+    background-color: $color-yellow
+    border-radius: 0px 10px 10px 0px
 
 // ** List Section Styles
 
@@ -167,8 +196,17 @@ a
 
   &__main, &__archived, &__favs, &__trashed
     display: none
+    padding-bottom: 24px
+
     &.show-section
       display: block
+  
+  &__h2 
+    text-transform: uppercase
+    font-weight: $regular
+    font-size: 14px !important
+    letter-spacing: .5px
+    color: $color-grey
 
 #favNotes, #mainNotes, #archivedNotes
   @extend %flex-cont
@@ -176,7 +214,6 @@ a
 
   &.show-section
     display: flex
-  
 
 .listItem
   display: inline-block
@@ -184,9 +221,22 @@ a
   width: calc(100% / 5)
   padding: 0px 18px
 
+  +mQD(1600px)
+    width: calc(100% / 4)
+  
+  +mQD(1366px)
+    width: calc(100% / 3)
+  
+  +mQD(1132px)
+    width: calc(100% / 2)
+  
+  +mQD(500px)
+
 .listItem__cont
   padding: 13px 20px 20px
-  +grey-border(1px, null, 10px)
+  border-radius: 10px
+  box-shadow: 0px 2px 0px $color-grey3
+  background-color: $color-white
   margin-bottom: 36px
 
 .listItem__title
@@ -194,6 +244,9 @@ a
   margin-bottom: 15px
   min-height: 3px
   font-size: map-get($heading-sizes, "h4")
+
+.listItem__body
+  font-size: 14px
 
 .listItem__title, .listItem__body
   white-space: pre-wrap
