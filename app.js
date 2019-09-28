@@ -77,11 +77,12 @@ const form = {
 	},
 
 	domCache() {
-		this.container = document.querySelector('.form');
+		this.mainContainer = document.getElementById('form');
+		this.container = document.getElementById('form__cont');
 		this.title = document.getElementById('form__title-input');
 		this.body = document.getElementById('form__body-input');
+		this.buttonContainer = document.querySelector('.form__title-btn');
 		this.addNoteButton = document.getElementById('header__button-add');
-		// this.menu = document.getElementById('topBar__menu-cont');
 		this.archiveButton = document.getElementById('form__btn--archive');
 		this.favButton = document.getElementById('form__btn--fav');
 		this.closeButton = document.getElementById('form__menu-btn');
@@ -103,7 +104,6 @@ const form = {
 		const target = e.target;
 		this.checkButtonClass(this.archiveButton, this.favButton, target);
 		this.checkButtonClass(this.favButton, this.archiveButton, target);
-		console.log(target);
 	},
 
 	removeButtonClass() {
@@ -111,11 +111,11 @@ const form = {
 	},
 
 	showForm() {
-		this.container.classList.add('show');
+		this.mainContainer.classList.add('show');
 	},
 
 	focus() {
-		element.addClasses([ this.container ], 'show');
+		element.addClasses([ this.mainContainer ], 'show');
 	},
 
 	clear() {
@@ -124,7 +124,7 @@ const form = {
 	},
 
 	blur() {
-		element.removeClasses([ this.menu, this.body ], 'show');
+		this.mainContainer.classList.remove('show');
 		this.removeButtonClass();
 		this.clear();
 	}
@@ -205,7 +205,7 @@ const note = {
 	},
 
 	checkType(button, objectKey) {
-		if (button.className === 'true') {
+		if (button.classList.contains('true')) {
 			this[objectKey] = true;
 		} else {
 			this[objectKey] = false;
@@ -232,7 +232,6 @@ const note = {
 			fav: faved
 		});
 		storage.update();
-		// form.blur();
 	},
 
 	// * Method used to render elements stored in localstorage when page loads
@@ -260,7 +259,7 @@ const note = {
 		const formTitleText = form.title.textContent;
 		const formBodyText = form.body.textContent;
 		const formBodyLength = formBodyText.length;
-		const noteExist = this.items.filter((x) => x.title === formTitleText && x.body === formBodyText); // come back to this
+		// const noteExist = this.items.filter((x) => x.title === formTitleText && x.body === formBodyText); // come back to this
 		this.storeType();
 		if (formBodyLength >= 1 && this.fav === true) {
 			this.render(this.favSection, formTitleText, formBodyText, false, true);
@@ -383,7 +382,7 @@ const search = {
 	},
 
 	filterNotes(e) {
-		// console.log(e);
+		e.stopPropagation();
 		const value = e.target.value;
 		const notes = [ ...note.allNotes ];
 		// notes.map( x => )
@@ -422,18 +421,18 @@ const app = {
 	},
 
 	bindEvents() {
-		document.addEventListener('click', this.onFormBlur);
-		form.container.addEventListener('click', form.addButtonClass.bind(form), true);
+		form.mainContainer.addEventListener('click', this.onFormBlur);
+		form.buttonContainer.addEventListener('click', form.addButtonClass.bind(form));
 	},
 
 	onFormBlur(e) {
+		e.stopPropagation();
 		const formContainer = `#${form.container.id}`;
 		const targetClicked = e.target.closest(formContainer);
 		if (targetClicked) {
 			return false;
 		} else {
 			note.add();
-			// form.blur();
 		}
 	}
 };

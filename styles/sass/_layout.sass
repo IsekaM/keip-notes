@@ -1,9 +1,10 @@
-// *** Simple Resets
+/*======================================================*/
+  /* Simple Resets */
+/*======================================================*/
 
 *
   box-sizing: border-box
   font-family: $base-font-family
-  // +trans(all, 500ms)
 
 html
   min-height: 100%
@@ -13,7 +14,7 @@ body
   margin: 0px
   font-size: $base-font-size
   line-height: $base-line-height
-  background-color: $color-grey2
+  background: $color-grey2
   color: $color-black
   overflow-x: hidden
 
@@ -28,7 +29,13 @@ a
   text-decoration: none
   color: $color-grey
 
-// *** Header Styles
+input, textarea, select, button, [contenteditable="true"]
+  &:focus
+    outline: none
+
+/*======================================================*/
+  /* Header Styles */
+/*======================================================*/
 
 .header
   +flex-row(true, center, true)
@@ -75,47 +82,38 @@ a
   &-add
     height: 48px
     border-radius: 10px
-    box-shadow: 0px 2px 0px $color-grey3
-    +trans(all, 150ms)
 
     span:first-of-type
       margin-right: 10px
 
-    &:hover
-      box-shadow: none
-      transform: translateY(2px)
-
-// ** Form Styles
-
-
+/*======================================================*/
+  /* Form Styles */
+/*======================================================*/
 
 .form
-  +position(absolute, (left: 0, top: 0), 100%, 100%)
-  background-color: transparentize($color-black, 0.3)
-  z-index: 10
+  +position(fixed, (left: 0, top: 0), 100%, 0px)
   +flex-row(center, center, true)
-  visibility: hidden
-  +trans(visibility, 200ms)
+  +trans(height, 200ms)
+  background: transparentize($color-black, 0.6)
+  z-index: 10
+  overflow: hidden
 
   &.show
-    visibility: visible
+    height: 100%
 
   [contenteditable="true"]:empty:not(:focus):before
   content: attr(data-placeholder)
 
   &__cont
     background: $color-white
-    opacity: 1 !important
     width: 100%
     max-width: 600px
     padding: 20px
-    background: $color-white
     border-radius: 10px
-    z-index: 11
 
   &__title
-    background: $color-white
     +flex-row(space-between, center, true)
+    background: $color-white
     font-weight: $bold
     padding-bottom: 20px
   
@@ -136,7 +134,7 @@ a
 .form [contenteditable="true"]:empty:not(:focus):before
   content: attr(data-placeholder)
 
-.form button
+.form button[class^="form__btn--"]
   background: transparent
   border: none
   cursor: pointer
@@ -151,43 +149,61 @@ a
     fill: $color-black 
 
 
-// ** Navbar Styles
+/*======================================================*/
+  /* Navbar Styles */
+/*======================================================*/
 
 .nav
-  padding-top: 180px
-  padding-right: 18px
   +position(fixed, (top: 0px, left: 0px), 314px, 100%)
+  +flex-row(flex-start, space-between)
+  flex-direction: column
+  padding: 180px 36px 60px 0px
   background: $color-white
   border-top-right-radius: 20px
   z-index: 2
 
-  ul
-    height: 100%
+  &__cont
+    flex: 1 1 0
 
-.nav__item-img
-  display: inline-block
-  margin-right: 15px
+  &__item-img
+    display: inline-block
+    margin-right: 15px
 
-.nav__item-text
-  display: inline-block
-  transform: translateY(-2px)
+  &__item-text
+    display: inline-block
+    transform: translateY(-2px)
 
-.nav__item
-  font-size: map-get($heading-sizes, "h3")
-  font-weight: bold
-  color: $color-black
-  padding: 15px 0px 10px 36px
-  cursor: pointer
+  &__item
+    +trans(all, 150ms)
+    font-size: map-get($heading-sizes, "h3")
+    font-weight: bold
+    color: $color-black
+    padding: 15px 0px 10px 36px
+    cursor: pointer
+  
+    &:hover
+      border-radius: 0px 10px 10px 0px
+      background: $color-grey2
 
-  &:hover
-    border-radius: 0px 10px 10px 0px
-    background-color: $color-grey2
+    &.active
+      background: $color-yellow
+      border-radius: 0px 10px 10px 0px
 
-  &.active
-    background-color: $color-yellow
-    border-radius: 0px 10px 10px 0px
+.nav .footer
+  font-weight: $regular
+  padding-left: 36px
+  font-size: 14px
+  color: $color-grey
 
-// ** List Section Styles
+  a 
+    text-decoration: underline
+
+  p
+    margin-bottom: 0px
+
+/*======================================================*/
+  /* Note Section Styles */
+/*======================================================*/
 
 .listSection
   +position(absolute, (top: 120px, left: 314px), calc(100% - 314px))
@@ -202,24 +218,24 @@ a
       display: block
   
   &__h2 
-    text-transform: uppercase
     font-weight: $regular
-    font-size: 14px !important
-    letter-spacing: .5px
+    font-size: 14px
     color: $color-grey
+    text-transform: uppercase
+    letter-spacing: .5px
+    padding-left: 18px
+    margin: 0px 0px 20px
+    
 
-#favNotes, #mainNotes, #archivedNotes
-  @extend %flex-cont
-  flex-wrap: wrap
+.favNotes, .mainNotes, .archivedNotes
+  +flex-row(true, true, wrap)
 
   &.show-section
     display: flex
 
 .listItem
-  display: inline-block
-  // width: auto
-  width: calc(100% / 5)
   padding: 0px 18px
+  width: calc(100% / 5)
 
   +mQD(1600px)
     width: calc(100% / 4)
@@ -232,35 +248,29 @@ a
   
   +mQD(500px)
 
-.listItem__cont
-  padding: 13px 20px 20px
-  border-radius: 10px
-  box-shadow: 0px 2px 0px $color-grey3
-  background-color: $color-white
-  margin-bottom: 36px
+  &__cont
+    padding: 13px 20px 20px
+    border-radius: 10px
+    box-shadow: 0px 2px 0px $color-grey3
+    background: $color-white
+    margin-bottom: 36px
 
-.listItem__title
-  font-weight: $bold
-  margin-bottom: 15px
-  min-height: 3px
-  font-size: map-get($heading-sizes, "h4")
+  &__title
+    font-weight: $bold
+    margin-bottom: 15px
+    min-height: 3px
+    font-size: 16px
 
-.listItem__body
-  font-size: 14px
+  &__body
+    font-size: 14px
 
-.listItem__title, .listItem__body
-  white-space: pre-wrap
-  word-wrap: break-word
-  overflow-wrap: break-word
+  &__title, &__body
+    white-space: pre-wrap
+    word-wrap: break-word
+    overflow-wrap: break-word
 
-// ** footer
+/*======================================================*/
+  /* Footer Styles */
+/*======================================================*/
 
-.footer
-  margin-top: auto
-  z-index: 2
-  font-weight: $bold
 
-  p
-    +position(relative, (left: 26px, bottom: 0px))
-    margin-bottom: 0px
-    font-weight: $regular

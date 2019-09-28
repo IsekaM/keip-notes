@@ -7,43 +7,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,900&display=swap" rel="stylesheet"> -->
   <link rel="stylesheet" href="./styles/css/normalize.css">
   <link rel="stylesheet" href="./styles/css/font.css">
   <link rel="stylesheet" href="./styles/css/main.css">
-  <!-- <link rel="stylesheet" href="./styles/style.css"> -->
   <title>Keip - Simple Local Storage Notes App</title>
 </head>
 
 <body>
-
-    <!-- <header class="topBar">
-      <ul class="topBar__cont">
-        <li class="topBar__nav">
-          <div class="topBar__nav-cont">
-            <div class="topBar__nav-burger btn btn--circle">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22.213" height="15.809" viewBox="0 0 22.213 15.809">
-                <g transform="translate(1.5 1.5)">
-                  <path d="M4395,74h19.213" transform="translate(-4395 -74)" fill="none" stroke="#2d3142" stroke-linecap="round"
-                    stroke-width="3" />
-                  <path d="M4395,74h19.213" transform="translate(-4395 -67.596)" fill="none" stroke="#2d3142" stroke-linecap="round"
-                    stroke-width="3" />
-                  <path d="M4395,74h19.213" transform="translate(-4395 -61.192)" fill="none" stroke="#2d3142" stroke-linecap="round"
-                    stroke-width="3" />
-                </g>
-              </svg>
-            </div>
-            <div class="topBar__nav-logo"><img src="./vect/logo.svg" alt="Keip Logo"></div>
-          </div>
-        </li>
-
-        <li class="topBar__search">
-          <input class="topBar__search-input" type="search" name="" id="" placeholder="Search Notes">
-          <button class="topBar__search-button btn btn--green btn--circle"><img src="./vect/search.svg" alt="search icon"></button>
-        </li>        
-      </ul>
-    </header> -->
-
     <header class="header">
       <div class="header__nav">
         <div class="header__nav-burger">
@@ -88,31 +58,12 @@
       </div>
     </header>
 
-    <!-- <div class="form">
-      <ul id="form__input">
-        <li class="topBar__input-title-cont">
-          <div id="topBar__input-title" contenteditable="true" tabindex="1" data-text="Take a note"></div>
-          <ul>
-            <li class="topBar__button"><img src="./vect/archive.svg" alt="" id="topBar__button-archive"></li>
-            <li class="topBar__button"><img src="./vect/star_favourite.svg" alt="" id="topBar__button-fav"></li>
-          </ul>
-        </li>
-        <li class="topBar__input-body-cont">
-          <div id="topBar__input-body" contenteditable="true" tabindex="2" data-text="Add Note"></div>
-        </li>
-        <li class="topBar__menu-cont" id="topBar__menu-cont">
-          <div class="topBar__menu"><button class="btn btn--red plain right topBar__menu-button--close"
-              id="topBar__menu-button--close">Close</button></div>
-        </li>
-      </ul>
-    </div> -->
-
-    <div class="form">
+    <div class="form" id="form">
       <div class="form__cont" id="form__cont">
         <div class="form__title">
-          <div class="form__title-input" id="form__title-input" contenteditable="true" data-placeholder="Note Title"></div>
+          <div class="form__title-input" id="form__title-input" contenteditable="true" data-placeholder="Note Title" autofocus="true"></div>
           <div class="form__title-btn">
-            <button id="form__btn--fav">
+            <button class="form__btn--fav" id="form__btn--fav">
               <svg xmlns="http://www.w3.org/2000/svg" width="15.75" height="15" viewBox="0 0 15.75 15">
                 <g transform="translate(43)">
                   <g transform="translate(-43 0)">
@@ -127,7 +78,7 @@
                 </g>
               </svg>
             </button>
-            <button id="form__btn--archive">
+            <button class="form__btn--archive" id="form__btn--archive">
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
                 <path
                   d="M136.75,846.5v-2.25l.75,2.25Zm0,6h-10.5a.75.75,0,0,1-.75-.75V848h2.25a.75.75,0,0,1,.75.75v.75A1.5,1.5,0,0,0,130,851h3a1.5,1.5,0,0,0,1.5-1.5v-.75a.75.75,0,0,1,.75-.75h2.25v3.75A.75.75,0,0,1,136.75,852.5Zm-10.5-8.25v2.25h-.75Zm2.25-3.75h6a.75.75,0,0,1,.75.75v5.25h-.75A1.5,1.5,0,0,0,133,848v.75a.75.75,0,0,1-.75.75h-1.5a.75.75,0,0,1-.75-.75V848a1.5,1.5,0,0,0-1.5-1.5h-.75v-5.25A.75.75,0,0,1,128.5,840.5Zm9,1.5h-.75v-1.5a1.5,1.5,0,0,0-1.5-1.5h-7.5a1.5,1.5,0,0,0-1.5,1.5V842h-.75l-1.5,4.5v6a1.5,1.5,0,0,0,1.5,1.5h12a1.5,1.5,0,0,0,1.5-1.5v-6Z"
@@ -175,33 +126,31 @@
 
     <div class="listSection">
       <section class="listSection__favs show-section">
-        <h2 class="listSection__h2 h4 pad-left-18">Favourites</h2>
-        <ul id="favNotes">
+        <h2 class="listSection__h2">Favourites</h2>
+        <ul class="favNotes" id="favNotes">
         </ul>
       </section>
         
       <section class="listSection__main show-section">
-        <h2 class="listSection__h2 h4 pad-left-18">Other</h2>
-        <ul id="mainNotes">
+        <h2 class="listSection__h2">Other</h2>
+        <ul class="mainNotes" id="mainNotes">
         </ul>
       </section>
 
       <section class="listSection__archived">
-        <h2 class="listSection__h2 h4 pad-left-18">Archived</h2>
-        <ul id="archivedNotes">
+        <h2 class="listSection__h2">Archived</h2>
+        <ul class="archivedNotes" id="archivedNotes">
         </ul>
       </section>
 
       <section class="listSection__trashed">
-        <h2 class="listSection__h2 h4 pad-left-18">Trashed</h2>
-        <ul id="trashedNotes">
+        <h2 class="listSection__h2">Trashed</h2>
+        <ul class="trashedNotes" id="trashedNotes">
         </ul>
       </section>
-
     </div>
 
-
   <script src="./app.js"></script>
-</body>
 
+</body>
 </html>

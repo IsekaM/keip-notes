@@ -25,14 +25,6 @@
   @else 
     flex-wrap: $wrap
 
-// =flex-row($jc: flex-start, $align-items: flex-start, $wrap: no-wrap)
-//   @if $jc or $jc == true
-//     justify-content: flex-start 
-//   @if $align-items or $align-start == true 
-//     align-items: flex-start
-//   @if $wrap or $wrap == true 
-//     flex-wrap: wrap
-
 =flex-grid($type, $columns, $breakpoint)
   @media screen and (min-width: $breakpoint)
     @for $i from 1 through $columns
