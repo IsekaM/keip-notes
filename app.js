@@ -140,7 +140,7 @@ const note = {
 	},
 
 	delcareVars() {
-		(this.items = []), (this.title = ''), (this.index = 0), (this.fav = ''), (this.archived = '');
+		(this.items = []), (this.title = ''), (this.index = 0), (this.fav = ''), (this.archived = ''), this.trashed;
 	},
 
 	cacheDom() {
@@ -151,7 +151,10 @@ const note = {
 		this.favSection = document.getElementById('favNotes');
 		this.mainSection = document.getElementById('mainNotes');
 		this.archivedSection = document.getElementById('archivedNotes');
-		this.allNotes = document.getElementsByClassName('listItem__cont');
+		this.allNotes = document.getElementsByClassName('listItem');
+		this.trashedSection = document.getElementById('trashedNotes');
+		this.allNotesCont = document.getElementsByClassName('listItem__cont');
+		this.trashButtons = document.getElementsByClassName('listItem__trash-btn');
 	},
 
 	bindEvents() {
@@ -160,7 +163,9 @@ const note = {
 			item.addEventListener('click', this.storeIndex.bind(this));
 			item.addEventListener('keyup', this.edit.bind(this));
 		}
-		form.closeButton.addEventListener('click', this.add.bind(this));
+		for (btn of this.trashButtons) {
+			btn.addEventListener('click', this.trash.bind(this));
+		}
 	},
 
 	prepend(parent, element) {
@@ -178,19 +183,32 @@ const note = {
 		const divCont = element.create('div');
 		const listItemTitle = element.create('div');
 		const listItemBody = element.create('div');
+		const listTrashBtn = element.create('button');
+		const listTrashBtnIcon = `
+		<svg xmlns="http://www.w3.org/2000/svg" width="15.75" height="15" viewBox="0 0 21 20">
+      <g transform="translate(-179 -360)">
+        <g transform="translate(56 160)">
+          <path
+            d="M130.35,216h2.1v-8h-2.1Zm4.2,0h2.1v-8h-2.1Zm-6.3,2h10.5V206h-10.5Zm2.1-14h6.3v-2h-6.3Zm8.4,0v-4h-10.5v4H123v2h3.15v14h14.7V206H144v-2Z"
+            fill="#2d3142" fill-rule="evenodd" />
+        </g>
+      </g>
+    </svg>`;
 
 		//Adding attributes to eatch element
 		element.attributes(listContainer, { class: 'listItem' });
 		element.attributes(divCont, { class: 'listItem__cont' });
 		element.attributes(listItemTitle, { class: 'listItem__title', contenteditable: 'true' });
 		element.attributes(listItemBody, { class: 'listItem__body', contenteditable: 'true' });
+		element.attributes(listTrashBtn, { class: 'listItem__trash-btn' });
 
 		//Adding text to title and body
 		listItemTitle.textContent = title;
 		listItemBody.textContent = body;
 
 		//Appending children to list container
-		element.appendChildren(divCont, [ listItemTitle, listItemBody ]);
+		listTrashBtn.innerHTML = listTrashBtnIcon;
+		element.appendChildren(divCont, [ listTrashBtn, listItemTitle, listItemBody ]);
 		element.appendChildren(listContainer, [ divCont ]);
 
 		//Return list item
@@ -246,6 +264,8 @@ const note = {
 					this.append(this.favSection, addItem);
 				} else if (item.archived === true) {
 					this.append(this.archivedSection, addItem);
+				} else if (item.trashed === true) {
+					this.append(this.trashedSection, addItem);
 				} else {
 					this.append(this.mainSection, addItem);
 				}
@@ -299,6 +319,36 @@ const note = {
 		} else if (className === 'listItem__body') {
 			this.items[i].body = target.textContent;
 		}
+		storage.update();
+	},
+
+	trash(e) {
+		e.stopPropagation();
+		const target = e.target;
+		const className = 'listItem__trash-btn';
+		const notes = [ ...this.allNotesCont ];
+		let element = getParent(target, className);
+
+		// **Move item to trashed section
+		function getParent(target, className) {
+			let element = target;
+			while (!element.classList.contains(className)) {
+				element = element.parentElement;
+			}
+			return element;
+		}
+
+		const noteTitle = element.nextElementSibling.textContent;
+		const noteBody = element.nextElementSibling.nextElementSibling.textContent;
+
+		this.items
+			.filter((item) => item.title === noteTitle && item.body === noteBody)
+			.map((item) => ((item.trashed = true), (item.archived = false), (item.fav = false)));
+
+		notes
+			.filter((note) => note.children[1].textContent === noteTitle && note.children[2].textContent === noteBody)
+			.map((note) => this.prepend(this.trashedSection, note.parentElement));
+
 		storage.update();
 	}
 };
@@ -383,13 +433,12 @@ const search = {
 
 	filterNotes(e) {
 		e.stopPropagation();
-		const value = e.target.value;
-		const notes = [ ...note.allNotes ];
-		// notes.map( x => )
-		function checkNoteValue(x, value) {
-			const titleText = x.firstChild.textContent;
-			const bodyText = x.firstChild.nextSibling.textContent;
+		const value = e.target.value.toLowerCase();
+		const notes = [ ...note.allNotesCont ];
 
+		function checkNoteValue(x, value) {
+			const titleText = x.firstChild.textContent.toLowerCase();
+			const bodyText = x.firstChild.nextSibling.textContent.toLowerCase();
 			return titleText.includes(value) || bodyText.includes(value);
 		}
 

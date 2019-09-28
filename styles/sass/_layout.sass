@@ -1,3 +1,14 @@
+%icon-btn
+  background: transparent
+  border: none
+  cursor: pointer
+
+  svg path 
+    fill: $color-grey
+
+  &:hover > svg path 
+    fill: $color-black 
+
 /*======================================================*/
   /* Simple Resets */
 /*======================================================*/
@@ -135,18 +146,9 @@ input, textarea, select, button, [contenteditable="true"]
   content: attr(data-placeholder)
 
 .form button[class^="form__btn--"]
-  background: transparent
-  border: none
-  cursor: pointer
-
+  +svg-icon-btn()
   &.true svg path
     fill: $color-black
-
-  svg path 
-    fill: $color-grey
-
-  &:hover > svg path 
-    fill: $color-black 
 
 
 /*======================================================*/
@@ -227,7 +229,7 @@ input, textarea, select, button, [contenteditable="true"]
     margin: 0px 0px 20px
     
 
-.favNotes, .mainNotes, .archivedNotes
+.favNotes, .mainNotes, .archivedNotes, .trashedNotes
   +flex-row(true, true, wrap)
 
   &.show-section
@@ -249,11 +251,21 @@ input, textarea, select, button, [contenteditable="true"]
   +mQD(500px)
 
   &__cont
+    position: relative
     padding: 13px 20px 20px
     border-radius: 10px
     box-shadow: 0px 2px 0px $color-grey3
     background: $color-white
     margin-bottom: 36px
+  
+  &__trash-btn
+    +position(absolute, (right: 20px, top: 15px))
+    +trans(all, 200ms)
+    padding: 0px
+    visibility: hidden
+    opacity: 0
+    +svg-icon-btn($color-grey, $color-red)
+    @extend .btn:active
 
   &__title
     font-weight: $bold
@@ -268,9 +280,8 @@ input, textarea, select, button, [contenteditable="true"]
     white-space: pre-wrap
     word-wrap: break-word
     overflow-wrap: break-word
-
-/*======================================================*/
-  /* Footer Styles */
-/*======================================================*/
-
+  
+  &:hover > &__cont &__trash-btn
+    visibility: visible 
+    opacity: 1
 

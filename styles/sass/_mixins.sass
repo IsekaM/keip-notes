@@ -78,5 +78,16 @@
   @each $key, $val in $cords
     #{$key}: $val
 
+=svg-icon-btn($color: $color-grey, $hover: $color-black)
+  background: transparent
+  border: none
+  cursor: pointer
+
+  svg path 
+    fill: $color
+
+  &:hover > svg path 
+    fill: $hover
+
 =trans($property, $time)
   transition: $property $time ease
