@@ -166,6 +166,8 @@ const note = {
 		for (btn of this.trashButtons) {
 			btn.addEventListener('click', this.trash.bind(this));
 		}
+
+		form.closeButton.addEventListener('click', this.add.bind(this));
 	},
 
 	prepend(parent, element) {
@@ -326,10 +328,13 @@ const note = {
 		e.stopPropagation();
 		const target = e.target;
 		const className = 'listItem__trash-btn';
-		const notes = [ ...this.allNotesCont ];
-		let element = getParent(target, className);
+		const ele = getParent(target, className);
+		const note = getParent(target, 'listItem');
+		const trashedSection = this.trashedSection;
 
 		// **Move item to trashed section
+
+		// Function to get return button with item class
 		function getParent(target, className) {
 			let element = target;
 			while (!element.classList.contains(className)) {
@@ -338,17 +343,28 @@ const note = {
 			return element;
 		}
 
-		const noteTitle = element.nextElementSibling.textContent;
-		const noteBody = element.nextElementSibling.nextElementSibling.textContent;
+		// Capture note title and body text
+		const noteTitle = ele.nextElementSibling.textContent;
+		const noteBody = ele.nextElementSibling.nextElementSibling.textContent;
 
-		this.items
-			.filter((item) => item.title === noteTitle && item.body === noteBody)
-			.map((item) => ((item.trashed = true), (item.archived = false), (item.fav = false)));
+		// If the note is a child of the trashed section, delete permamently
+		// else add to trashed section
 
-		notes
-			.filter((note) => note.children[1].textContent === noteTitle && note.children[2].textContent === noteBody)
-			.map((note) => this.prepend(this.trashedSection, note.parentElement));
+		if (trashedSection.contains(note)) {
+			const itemIndex = this.items.findIndex(item => item.title == noteTitle && item.body == noteBody );
+			this.items.splice(itemIndex, 1);
+			note.remove();
+		} else {
+			// Check the items array to see what item has the same text as note body and title
+			// Set the entry in the array to reflect that the item is trashed
+			this.items
+				.filter((item) => item.title === noteTitle && item.body === noteBody)
+				.map((item) => ((item.trashed = true), (item.archived = false), (item.fav = false)));
 
+			this.prepend(trashedSection, note);
+		}
+
+		// Update items in local storage
 		storage.update();
 	}
 };
@@ -403,6 +419,7 @@ const nav = {
 		);
 
 		this.items.filter((x) => x.classList.contains('active')).map((x) => x.classList.remove('active'));
+
 		sections.map((x) => x.classList.remove('show-section'));
 
 		if (index === 0 || sections[index].contains(target)) {
